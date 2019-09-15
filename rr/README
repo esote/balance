@@ -1,0 +1,11 @@
+Package rr provides round-robins.
+
+$ go test -bench . -benchmem
+	goos: linux
+	goarch: amd64
+	pkg: github.com/esote/balance/rr
+	BenchmarkPlain-6       	50000000	        23.7 ns/op	       6 B/op	       0 allocs/op
+	BenchmarkPlainHuge-6   	100000000	        23.3 ns/op	       7 B/op	       0 allocs/op
+	BenchmarkLocked-6      	50000000	        35.1 ns/op	       6 B/op	       0 allocs/op
+	PASS
+	ok  	github.com/esote/balance/rr	5.372s

@@ -1,4 +1,4 @@
-// Package lb provides a simple and efficient load balancer.
+// Package lb provides a load balancer.
 //
 // There are four different ways to select a resource depending on whether you
 // wish to use the resource priority or weight.
@@ -16,6 +16,7 @@ import (
 	cryptorand "crypto/rand"
 	"errors"
 	"fmt"
+	"math"
 	"math/big"
 	"math/rand"
 	"sort"
@@ -58,7 +59,7 @@ func (p byPriority) Less(i, j int) bool { return p[i].Priority < p[j].Priority }
 // zero-weight resources will be ignored when weight is used.
 func NewLoadBalancer(resources []Resource) (*LoadBalancer, error) {
 	if len(resources) == 0 {
-		return nil, errors.New("balance: empty resources")
+		return nil, errors.New("lb: empty resources")
 	}
 
 	sort.Sort(byPriority(resources))
@@ -105,7 +106,7 @@ func NewLoadBalancer(resources []Resource) (*LoadBalancer, error) {
 
 	// Seed b.Rand nondeterministically.
 	seed, err := cryptorand.Int(cryptorand.Reader,
-		big.NewInt(int64(^uint64(0)>>1)))
+		big.NewInt(math.MaxInt64))
 
 	if err != nil {
 		return nil, err
@@ -177,7 +178,7 @@ func (lb *LoadBalancer) fromPriority(n uint64) (*group, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("balance: no resources with priority >= %d", n)
+	return nil, fmt.Errorf("lb: no resources with priority >= %d", n)
 }
 
 func (lb *LoadBalancer) fromWeight(g *group) (*Resource, error) {
@@ -193,5 +194,5 @@ func (lb *LoadBalancer) fromWeight(g *group) (*Resource, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("balance: unable to find resource")
+	return nil, fmt.Errorf("lb: unable to find resource")
 }
