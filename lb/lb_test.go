@@ -18,27 +18,27 @@ func TestWeightedDistribution(t *testing.T) {
 	)
 
 	distParams := []distParams{
-		distParams{
+		{
 			resources: []Resource{
-				Resource{20, 0, 0},
-				Resource{20, 0, 1},
+				{20, 0, 0},
+				{20, 0, 1},
 			},
 			expected: []float64{0.5, 0.5},
 		},
-		distParams{
+		{
 			resources: []Resource{
-				Resource{10, 60, 0},
-				Resource{10, 10, 1},
-				Resource{10, 30, 2},
+				{10, 60, 0},
+				{10, 10, 1},
+				{10, 30, 2},
 			},
 			expected: []float64{0.6, 0.1, 0.3},
 		},
-		distParams{
+		{
 			resources: []Resource{
-				Resource{0, 0, 0},
-				Resource{0, 1, 1},
-				Resource{0, 0, 2},
-				Resource{0, 1, 3},
+				{0, 0, 0},
+				{0, 1, 1},
+				{0, 0, 2},
+				{0, 1, 3},
 			},
 			expected: []float64{0.0, 0.5, 0.0, 0.5},
 		},
@@ -81,13 +81,13 @@ func distribution(t *testing.T, n float64, delta float64, p distParams) {
 
 // Common resources used to benchmark selection functions.
 var benchmarkResources = []Resource{
-	Resource{1, 60, 0},
-	Resource{1, 20, 0},
-	Resource{1, 20, 0},
-	Resource{2, 60, 0},
-	Resource{2, 40, 0},
-	Resource{3, 80, 0},
-	Resource{3, 20, 0},
+	{1, 60, 0},
+	{1, 20, 0},
+	{1, 20, 0},
+	{2, 60, 0},
+	{2, 40, 0},
+	{3, 80, 0},
+	{3, 20, 0},
 }
 
 // Load balancer used to benchmark selection functions.

@@ -14,14 +14,14 @@ func TestPlain(t *testing.T) {
 	cases := []struct {
 		times int
 		skip  int
-		have  []int
+		have  intList
 		want  []int
 	}{
 		{1, 0, nil, nil},
 		{1, 1, nil, nil},
-		{1, 0, []int{}, nil},
-		{1, 1, []int{}, nil},
-		{10, 0, []int{0, 1, 2}, []int{0, 1, 2, 0, 1, 2, 0, 1, 2, 0}},
+		{1, 0, intList{}, nil},
+		{1, 1, intList{}, nil},
+		{10, 0, intList{0, 1, 2}, []int{0, 1, 2, 0, 1, 2, 0, 1, 2, 0}},
 	}
 
 	for i, c := range cases {
@@ -29,7 +29,7 @@ func TestPlain(t *testing.T) {
 		r.Skip(c.skip)
 
 		for j := range c.want {
-			if have := r.Next().(int); have != c.want[j] {
+			if have := r.Next(); have != c.want[j] {
 				t.Fatalf("case %d: want %d have %d at index %d",
 					i, c.want[j], have, j)
 			}
@@ -39,10 +39,9 @@ func TestPlain(t *testing.T) {
 
 // Test with -race
 func TestLocked(t *testing.T) {
-	items := []int{0, 1, 2, 3, 4}
 	const count = 1000
 
-	r := NewLockedRoundRobin(intList(items))
+	r := NewLockedRoundRobin(intList{0, 1, 2, 3, 4})
 
 	var wg sync.WaitGroup
 	wg.Add(count)
@@ -58,7 +57,7 @@ func TestLocked(t *testing.T) {
 }
 
 func BenchmarkPlain(b *testing.B) {
-	r := NewRoundRobin(intList([]int{0, 1, 2, 3, 4, 5}))
+	r := NewRoundRobin(intList{0, 1, 2, 3, 4, 5})
 
 	b.ResetTimer()
 
@@ -86,7 +85,7 @@ func BenchmarkPlainHuge(b *testing.B) {
 }
 
 func BenchmarkLocked(b *testing.B) {
-	r := NewLockedRoundRobin(intList([]int{0, 1, 2, 3, 4, 5}))
+	r := NewLockedRoundRobin(intList{0, 1, 2, 3, 4, 5})
 
 	b.ResetTimer()
 
